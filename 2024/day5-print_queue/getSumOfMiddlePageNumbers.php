@@ -13,76 +13,41 @@ $updatePageNumbersFilePath = 'C:\code\advent-of-code\2024\day5-print_queue\updat
 
 $reportFilePath = 'reports/day5_printQueue_' . date('Ymd_His') . '.txt';
 
-$fileHandle = fopen($pageOrderRulesFilePath, "r");
-if($fileHandle !== false)
+$rules_fileHandle = fopen($pageOrderRulesFilePath, "r");
+if($rules_fileHandle !== false)
 {
-	// $i = 0;
-	while(getNextLine($fileHandle, $line))
+	$delimiter = '|';
+	while(getNextLine($rules_fileHandle, $line))
 	{
-		/*
-		++$i;
-		if($i >= 25)
-		{
-			break;
-		}
-		*/
-
-		/*
-		The first section specifies the page ordering rules, one per line. 
-		The first rule, 47|53, means that if an update includes both page number 47 and page number 53, 
-		 then page number 47 must be printed at some point before page number 53. 
-		 (47 doesn't necessarily need to be immediately before 53; other pages are allowed to be between them.)
-		*/
-
-		$pageRules[] = array_map('intval', explode('|', $line));
+		$pageRules[] = array_map('intval', explode($delimiter, $line));
 	}
 
-	fclose($fileHandle);
-
-
-	echo json_encode($pageRules);
-	// echo "Sum of middle page numbers [" . number_format($sum) . "], rightly ordered [], total [].";
-
-	// writeReport($reportFilePath, $products, $sum);
+	fclose($rules_fileHandle);
 }
 
 
-$fileHandle = fopen($updatePageNumbersFilePath, "r");
-if($fileHandle !== false)
+$pages_fileHandle = fopen($updatePageNumbersFilePath, "r");
+if($pages_fileHandle !== false)
 {
-	// $i = 0;
-	while(getNextLine($fileHandle, $line))
+	$delimiter = ',';
+	while(getNextLine($pages_fileHandle, $line))
 	{
-		/*
-		++$i;
-		if($i >= 25)
-		{
-			break;
-		}
-		*/
-
-		/*
-		The second section specifies the page numbers of each update. 
-		Because most safety manuals are different, the pages needed in the updates are different too. 
-		The first update, [75,47,61,53,29], means that the update consists of page numbers 75, 47, 61, 53, and 29.
-		*/
-
-		$updatePageNumbers[] = array_map('intval', explode(',', $line));
+		$updatePageNumbers[] = array_map('intval', explode($delimiter, $line));
 	}
 
-	fclose($fileHandle);
-	
-
-	echo json_encode($pageRules);
-	// echo "Sum of middle page numbers [" . number_format($sum) . "], rightly ordered [], total [].";
-
-	// writeReport($reportFilePath, $products, $sum);
-}
-else
-{
-	echo "Error reading \"corrupted memory\" into this program.\n";
+	fclose($pages_fileHandle);
 }
 
+
+
+
+
+
+
+// echo json_encode($pageRules);
+// echo "Sum of middle page numbers [" . number_format($sum) . "], rightly ordered [], total [].";
+
+// writeReport($reportFilePath, $products, $sum);
 
 echo "\n";
 echo 'DONE';
