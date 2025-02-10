@@ -7,6 +7,7 @@ $products = [];
 
 $pageRules = [];
 $updatePageNumbers = [];
+$middleNumbers = [];
 
 $pageOrderRulesFilePath = 'C:\code\advent-of-code\2024\day5-print_queue\print_order_rules.txt';
 $updatePageNumbersFilePath = 'C:\code\advent-of-code\2024\day5-print_queue\update_page_numbers.txt';
@@ -24,7 +25,7 @@ if($rules_fileHandle !== false)
 
 	fclose($rules_fileHandle);
 }
-
+      
 
 $pages_fileHandle = fopen($updatePageNumbersFilePath, "r");
 if($pages_fileHandle !== false)
@@ -40,12 +41,46 @@ if($pages_fileHandle !== false)
 
 
 
+$pageRulesCount = count($pageRules);
+
+foreach($updatePageNumbers as $i => $pageNbr)
+{
+	$isCorrectlyOrdered = true;
+
+	for($z = 0; $z < $pageRulesCount; ++$z)
+	{
+		$firstNbrIndex = array_search($pageRules[$z][0], $updatePageNumbers[$i]);
+		$secondNbrIndex = array_search($pageRules[$z][1], $updatePageNumbers[$i]);
+
+		if($firstNbrIndex !== false && $secondNbrIndex !== false)
+		{
+			$isCorrectlyOrdered = ($firstNbrIndex < $secondNbrIndex);
+			if(!$isCorrectlyOrdered)
+			{
+				break;
+			}
+		}
+	}
+
+
+	if($isCorrectlyOrdered)
+	{
+		$arrayLength = count($updatePageNumbers[$i]);
+		$middleIndex = floor($arrayLength / 2);
+		$middleNumber = $updatePageNumbers[$i][$middleIndex];
+		$middleNumbers[] = $middleNumber;
+		$sum += $middleNumber;
+	}	
+}
+
+
+
 
 
 
 
 // echo json_encode($pageRules);
-// echo "Sum of middle page numbers [" . number_format($sum) . "], rightly ordered [], total [].";
+echo "Sum of middle page numbers [" . number_format($sum) . "], rightly ordered [" . number_format(count($middleNumbers)) . "], total [" . number_format(count($updatePageNumbers)) . "].";
 
 // writeReport($reportFilePath, $products, $sum);
 
